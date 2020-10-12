@@ -1,153 +1,74 @@
 (function () {
-'use strict';
+  'use strict';
 
-angular.module('ShoppingListDirectiveApp', [])
-.controller('ShoppingListController', ShoppingListController)
-.factory('ShoppingListFactory', ShoppingListFactory)
-.directive('shoppingList', ShoppingListDirective);
+  // Declare our components:
+  angular.module('NarrowItDownApp', [])
+  .controller('NarrowItDownController', NarrowItDownController)
+  .service('MenuSearchService', MenuSearchService)
+  .constant('davidChuURL', 'https://davids-restaurant.herokuapp.com/menu_items.json')
+  .directive('foundItems', FoundItemsDirective);
 
+  NarrowItDownController.$inject = ['MenuSearchService'];
+  function NarrowItDownController(MenuSearchService) {
+    // MenuSearchService.getMatchedMenuItems('chicken'); // Test of search function.
+    this.found = [];// Initialize found list.
 
-function ShoppingListDirective() {
-  var ddo = {
-    templateUrl: 'shoppingList.html',
-    scope: {
-      items: '<',
-      myTitle: '@title',
-      onRemove: '&'
-    },
-    controller: ShoppingListDirectiveController,
-    controllerAs: 'list',
-    bindToController: true,
-    link: ShoppingListDirectiveLink,
-    transclude: true
-  };
+    this.searchTerm = "";
 
-  return ddo;
-}
-
-
-function ShoppingListDirectiveLink(scope, element, attrs, controller) {
-  console.log("Link scope is: ", scope);
-  console.log("Controller instance is: ", controller);
-  console.log("Element is: ", element);
-
-  scope.$watch('list.cookiesInList()', function (newValue, oldValue) {
-    console.log("Old value: ", oldValue);
-    console.log("New value: ", newValue);
-
-    if (newValue === true) {
-      displayCookieWarning();
+    this.searchMenu = function() {
+      this.found = MenuSearchService.getMatchedMenuItems(this.searchTerm);// Use service to get array of matching items.
     }
-    else {
-      removeCookieWarning();
+
+    this.removeItem = function(index) {
+      found.splice(index, 1);// Splice out the item that was to be removed.
     }
-  });
-
-  function displayCookieWarning() {
-    // Using Angular jqLite
-    // var warningElem = element.find("div");
-    // warningElem.css('display', 'block');
-
-    // If jQuery included before Angular
-    var warningElem = element.find("div.error");
-    warningElem.slideDown(900);
   }
 
-  function removeCookieWarning() {
-    // Using Angular jqLite
-    // var warningElem = element.find('div');
-    // warningElem.css('display', 'none');
+  MenuSearchService.$inject = ['$http', 'davidChuURL'];
+  function MenuSearchService($http, davidChuURL) {
+    this.getMatchedMenuItems = function (searchTerm) {
+      if (!searchTerm)
+        return [];// Don't bother if no search term was given.
 
-    // If jQuery included before Angular
-    var warningElem = element.find('div.error');
-    warningElem.slideUp(900);
+      console.log("Retrieving menu items...")
+
+      return $http({ method: 'GET', url: davidChuURL }).then(function(result) {// Make http call and set callback handler.
+        var foundItems = result.data.menu_items;// Extract full menu from returned data.
+        console.log(foundItems);
+
+        for(var i = 0; i < foundItems.length; i++) {
+          if(foundItems[i].description.indexOf(searchTerm) == -1) {
+            foundItems.splice(i, 1);// Splice out item if search term wasn't found in it.
+          }
+          // else {
+          //   console.log(foundItems[i].description);// Test to see that search is working.
+          // }
+        }
+        console.log(foundItems);
+        return foundItems;// Return an array of only items that match.
+      }).catch(function(error) {
+        console.log("Connection error");
+        return [];// Return no results if we didn't get anything.
+      });
+    };
   }
-}
 
-
-function ShoppingListDirectiveController() {
-  var list = this;
-
-  list.cookiesInList = function () {
-    for (var i = 0; i < list.items.length; i++) {
-      var name = list.items[i].name;
-      if (name.toLowerCase().indexOf("cookie") !== -1) {
-        return true;
-      }
+  function FoundItemsDirective() {
+    var ddo = {
+      templateUrl: 'foundList.html',
+      restrict: 'E',
+      scope: {
+        foundItems: '<',
+        onRemove: '&'
+      },
+      controller: FoundItemsController,
+      controllerAs: 'list',
+      bindToController: true
     }
 
-    return false;
-  };
-}
+    return ddo;
+  }
 
-
-ShoppingListController.$inject = ['ShoppingListFactory'];
-function ShoppingListController(ShoppingListFactory) {
-  var list = this;
-
-  // Use factory to create new shopping list service
-  var shoppingList = ShoppingListFactory();
-
-  list.items = shoppingList.getItems();
-  var origTitle = "Shopping List #1";
-  list.title = origTitle + " (" + list.items.length + " items )";
-
-  list.warning = "COOKIES DETECTED!";
-
-  list.itemName = "";
-  list.itemQuantity = "";
-
-  list.addItem = function () {
-    shoppingList.addItem(list.itemName, list.itemQuantity);
-    list.title = origTitle + " (" + list.items.length + " items )";
-  };
-
-  list.removeItem = function (itemIndex) {
-    console.log("'this' is: ", this);
-    this.lastRemoved = "Last item removed was " + this.items[itemIndex].name;
-    shoppingList.removeItem(itemIndex);
-    this.title = origTitle + " (" + list.items.length + " items )";
-  };
-}
-
-
-// If not specified, maxItems assumed unlimited
-function ShoppingListService(maxItems) {
-  var service = this;
-
-  // List of shopping items
-  var items = [];
-
-  service.addItem = function (itemName, quantity) {
-    if ((maxItems === undefined) ||
-        (maxItems !== undefined) && (items.length < maxItems)) {
-      var item = {
-        name: itemName,
-        quantity: quantity
-      };
-      items.push(item);
-    }
-    else {
-      throw new Error("Max items (" + maxItems + ") reached.");
-    }
-  };
-
-  service.removeItem = function (itemIndex) {
-    items.splice(itemIndex, 1);
-  };
-
-  service.getItems = function () {
-    return items;
-  };
-}
-
-
-function ShoppingListFactory() {
-  var factory = function (maxItems) {
-    return new ShoppingListService(maxItems);
-  };
-
-  return factory;
-}
+  function FoundItemsController() {}
 
 })();
