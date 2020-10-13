@@ -1,3 +1,32 @@
+ol {
+  list-style-type: none;
+}
+.found-list {
+  float: left;
+  clear: left;
+}
+.list-item {
+  background-color: #ddd;
+  margin-bottom: 10px;
+}
+.short_name {
+  float: left;
+  margin-right: 15px;
+  padding: 3px;
+  background-color: #000;
+  color: #fff;
+}
+.name {
+  background-color: #666;
+  color: #fff;
+}
+.description {
+  margin: 10px;
+}
+.list-item button {
+  margin: 10px;
+}
+
 h1 {
   margin-bottom: 30px;
 }

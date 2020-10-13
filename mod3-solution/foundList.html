@@ -1,8 +1,9 @@
 <h2>Your results:</h2>
+<div ng-if="list.foundItems.length == 0">Nothing found</div>
 <ol>
-  <li ng-repeat="item in list.items">
-    <div class="name">{{ item.name }}</div>
+  <li ng-repeat="item in list.foundItems" class="list-item">
     <div class="short_name">{{ item.short_name }}</div>
+    <div class="name">{{ item.name }}</div>
     <div class="description">{{ item.description }}</div>
     <button ng-click="list.onRemove({index: $index});">Don't want this one!</button>
   </li>
