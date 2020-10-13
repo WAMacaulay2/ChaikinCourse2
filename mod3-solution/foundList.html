@@ -1,5 +1,5 @@
 <h2>Your results:</h2>
-<div ng-if="list.foundItems.length == 0">Nothing found</div>
+<div ng-if="list.foundItems.length == 0 && list.hasSearched">Nothing found</div>
 <ol>
   <li ng-repeat="item in list.foundItems" class="list-item">
     <div class="short_name">{{ item.short_name }}</div>

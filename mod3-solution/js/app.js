@@ -13,16 +13,23 @@
     // MenuSearchService.getMatchedMenuItems('chicken'); // Test of search function.
     var control = this;
     control.found = [];// Initialize found list.
+    control.hasSearched = false;
 
     control.searchTerm = "";
 
     control.searchMenu = function() {
+      if (!control.searchTerm) {
+        control.hasSearched = true;
+        return;// Don't bother if no search term was given.
+      }
+
       var promise = MenuSearchService.getMatchedMenuItems(this.searchTerm);// Use service to get array of matching items.
 
       promise.then(function(response) {
         // console.log("Back in controller");
         // console.log(response);
         control.found = response;
+        control.hasSearched = true;
       })
     }
 
@@ -34,8 +41,6 @@
   MenuSearchService.$inject = ['$http', 'davidChuURL'];
   function MenuSearchService($http, davidChuURL) {
     this.getMatchedMenuItems = function (searchTerm) {
-      if (!searchTerm)
-        return [];// Don't bother if no search term was given.
 
       console.log("Retrieving menu items...")
 
@@ -70,7 +75,8 @@
       restrict: 'E',
       scope: {
         foundItems: '<',
-        onRemove: '&'
+        onRemove: '&',
+        hasSearched: '<'
       },
       controller: FoundItemsController,
       controllerAs: 'list',
