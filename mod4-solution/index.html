@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Chinese Restaurant Menu</title>
+  </head>
+  <body ng-app="MenuApp">
+    <h1>Some Chinese Restaurant</h1>
+
+    <ui-view></ui-view>
+
+    <!--  Libraries -->
+    <script src="lib/angular.min.js" charset="utf-8"></script>
+    <script src="lib/angular-ui-router.min.js" charset="utf-8"></script>
+
+    <!-- Modules -->
+    <script src="src/menuapp.module.js" charset="utf-8"></script>
+    <script src="src/data.module.js" charset="utf-8"></script>
+
+    <!-- Service -->
+    <script src="src/menudata.service.js" charset="utf-8"></script>
+
+    <!-- Components -->
+    <script src="src/categories.component.js" charset="utf-8"></script>
+    <script src="src/items.component.js" charset="utf-8"></script>
+
+    <!-- Routes -->
+    <script src="src/routes.js" charset="utf-8"></script>
+  </body>
+</html>
