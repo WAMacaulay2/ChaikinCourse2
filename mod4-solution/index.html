@@ -1,16 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html ng-app="MenuApp" lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
     <title>Chinese Restaurant Menu</title>
   </head>
-  <body ng-app="MenuApp">
+  <body>
     <h1>Some Chinese Restaurant</h1>
 
     <ui-view></ui-view>
 
     <!--  Libraries -->
-    <script src="lib/angular.min.js" charset="utf-8"></script>
+    <script src="lib/angular.min.js"></script>
     <script src="lib/angular-ui-router.min.js" charset="utf-8"></script>
 
     <!-- Modules -->
@@ -26,5 +26,9 @@
 
     <!-- Routes -->
     <script src="src/routes.js" charset="utf-8"></script>
+
+    <!-- Controllers -->
+    <script src="src/categories.controller.js" charset="utf-8"></script>
+    <!-- <script src="src/items.controller.js" charset="utf-8"></script> -->
   </body>
 </html>
