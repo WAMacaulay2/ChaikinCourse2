@@ -42,17 +42,18 @@
         <span>Code for your Favorite Dish*: </span>
         <input type="text" name="favDish" placeholder="Enter Menu Code"
         ng-model="signUpCtrl.user.favDish"
-        required
-        ng-blur="signUpCtrl.checkDish()">
+        ng-model-options="{debounce: 500}"
+        ng-change="signUpCtrl.checkDish()"
+        required>
         <span ng-if="signUpForm.favDish.$error.required && signUpForm.favDish.$touched"> No code entered</span>
         <span ng-if="signUpForm.favDish.$touched &&  !signUpForm.favDish.$error.required && !signUpCtrl.processing && !signUpCtrl.favDishName"> Dish does not exist</span>
-        <span ng-if="signUpForm.favDish.$touched && !signUpCtrl.processing && signUpCtrl.favDishName"> {{ signUpCtrl.favDishName }}</span>
+        <span ng-if="!signUpForm.favDish.$error.required && !signUpCtrl.processing && signUpCtrl.favDishName"> {{ signUpCtrl.favDishName }}</span>
       </div>
 
       <button class="signUpButton"
       ng-disabled="signUpForm.$invalid || signUpCtrl.processing || !signUpCtrl.favDishName"
       ng-click="signUpCtrl.submit()">Sign Up</button>
-      <span ng-if="signUpCtrl.submitted"> Thank you for signing up!</span>
+      <span ng-if="signUpCtrl.submitted"> Thank you for signing up! <a ui-sref="public.myinfo"> View profile</a></span>
     </form>
     <div>*Required field</div>
   </fieldset>
