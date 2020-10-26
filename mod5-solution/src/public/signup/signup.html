@@ -1,0 +1,58 @@
+<div class="container">
+  <h2 class="text-center">Sign Up For Our Newsletter!</h2>
+
+  <fieldset>
+    <legend>Enter Your Details</legend>
+    <form name="signUpForm" novalidate>
+
+      <div class="field">
+        <span>First Name*: </span>
+        <input type="text" name="firstName" placeholder="John"
+        ng-model="signUpCtrl.user.firstName"
+        required>
+        <span ng-if="signUpForm.firstName.$error.required && signUpForm.firstName.$touched"> First name required</span>
+      </div>
+
+      <div class="field">
+        <span>Last Name*: </span>
+        <input type="text" name="lastName" placeholder="Doe"
+        ng-model="signUpCtrl.user.lastName"
+        required>
+        <span ng-if="signUpForm.lastName.$error.required && signUpForm.lastName.$touched"> Last name required</span>
+      </div>
+
+      <div class="field">
+        <span>Email*: </span>
+        <input type="email" name="email" placeholder="some@domain.com"
+        ng-model="signUpCtrl.user.email"
+        required>
+        <span ng-if="signUpForm.email.$error.required && signUpForm.email.$touched"> Email required</span>
+        <span ng-if="signUpForm.email.$invalid && signUpForm.email.$touched"> Invalid email</span>
+      </div>
+
+      <div class="field">
+        <span>Phone: </span>
+        <input type="text" name="phone" placeholder="(###) ###-####"
+        ng-model="signUpCtrl.user.phone"
+        pattern="(\d{3})-(\d{3})-(\d{4})|\d{10}|\((\d{3})\) (\d{3})-(\d{4})">
+        <span ng-if="signUpForm.phone.$invalid && signUpForm.phone.$touched"> Invalid phone number</span>
+      </div>
+
+      <div class="field">
+        <span>Code for your Favorite Dish*: </span>
+        <input type="text" name="favDish" placeholder="Enter Menu Code"
+        ng-model="signUpCtrl.user.favDish"
+        required
+        ng-blur="signUpCtrl.checkDish()">
+        <span ng-if="signUpForm.favDish.$error.required && signUpForm.favDish.$touched"> No code entered</span>
+        <span ng-if="signUpCtrl.attemptedSubmit && !signUpCtrl.favDishValid && !signUpCtrl.processing"> Dish does not exist</span>
+      </div>
+
+      <button class="signUpButton"
+      ng-disabled="signUpForm.$invalid || signUpCtrl.processing"
+      ng-click="signUpCtrl.submit()">Sign Up</button>
+      <span ng-if="signUpCtrl.favDishValid"> Thank you for signing up!</span>
+    </form>
+    <legend>*Required field</legend>
+  </fieldset>
+</div>
