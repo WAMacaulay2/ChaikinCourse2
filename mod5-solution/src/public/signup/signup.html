@@ -45,14 +45,15 @@
         required
         ng-blur="signUpCtrl.checkDish()">
         <span ng-if="signUpForm.favDish.$error.required && signUpForm.favDish.$touched"> No code entered</span>
-        <span ng-if="signUpCtrl.attemptedSubmit && !signUpCtrl.favDishValid && !signUpCtrl.processing"> Dish does not exist</span>
+        <span ng-if="signUpForm.favDish.$touched &&  !signUpForm.favDish.$error.required && !signUpCtrl.processing && !signUpCtrl.favDishName"> Dish does not exist</span>
+        <span ng-if="signUpForm.favDish.$touched && !signUpCtrl.processing && signUpCtrl.favDishName"> {{ signUpCtrl.favDishName }}</span>
       </div>
 
       <button class="signUpButton"
-      ng-disabled="signUpForm.$invalid || signUpCtrl.processing"
+      ng-disabled="signUpForm.$invalid || signUpCtrl.processing || !signUpCtrl.favDishName"
       ng-click="signUpCtrl.submit()">Sign Up</button>
-      <span ng-if="signUpCtrl.favDishValid"> Thank you for signing up!</span>
+      <span ng-if="signUpCtrl.submitted"> Thank you for signing up!</span>
     </form>
-    <legend>*Required field</legend>
+    <div>*Required field</div>
   </fieldset>
 </div>

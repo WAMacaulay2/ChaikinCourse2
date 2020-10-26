@@ -8,12 +8,16 @@
   function UserService($http, ApiPath) {
     var service = this;
 
+    var setup = false;
     var firstName = "";
     var lastName = "";
     var email = "";
     var phone = "";
     var favDish = "";
 
+    service.isSetup = function() {
+      return setup;
+    }
     service.getFirstName = function() {
       return firstName;
     }
@@ -35,10 +39,11 @@
       return $http.get(ApiPath + "/menu_items/" + short_name.toUpperCase() + ".json")
       .then(function(response) {
         console.log("Favorite dish exists");
-        return true;
+        console.log(response);
+        return response.data.name;
       }).catch(function(response) {
         console.log("Favorite dish does not exist");
-        return false;
+        return "";
       });
     }
 
@@ -48,6 +53,7 @@
       email = userData.email;
       phone = userData.phone;
       favDish = userData.favDish;
+      setup = true;
     }
   }
 })();

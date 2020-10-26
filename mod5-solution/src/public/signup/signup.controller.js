@@ -15,38 +15,27 @@
       favDish: ""
     };
 
-    $ctrl.attemptedSubmit = false;
-    $ctrl.favDishValid = false;
-    $ctrl.processing = false;
+    $ctrl.submitted = false;// The Form has successfully submitted.
+    $ctrl.favDishName = "";// The name of the favorite dish.
+    $ctrl.processing = false;// The Favorite Dish is currently being validated.
 
     $ctrl.checkDish = function() {
-      $ctrl.attemptedSubmit = true;
+      if(!$ctrl.user.favDish) {
+        return;
+      }
       $ctrl.processing = true;
 
       UserService.validateFavDish($ctrl.user.favDish)
       .then(function(response) {
+        console.log("favDish=" + response);
         $ctrl.processing = false;
-        $ctrl.favDishValid = true;
-      })
-      .catch(function(response) {
-        $ctrl.processing = false;
+        $ctrl.favDishName = response;
       });
     }
 
     $ctrl.submit = function() {
-      $ctrl.attemptedSubmit = true;
-      $ctrl.processing = true;
-
-      UserService.validateFavDish($ctrl.user.favDish)
-      .then(function(response) {
-        $ctrl.processing = false;
-        $ctrl.favDishValid = true;
-
-        UserService.updateUser($ctrl.user);
-      })
-      .catch(function(response) {
-        $ctrl.processing = false;
-      });
+      $ctrl.submitted = true;
+      UserService.updateUser($ctrl.user);
     }
   }
 })();
