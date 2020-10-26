@@ -46,7 +46,7 @@
         ng-change="signUpCtrl.checkDish()"
         required>
         <span ng-if="signUpForm.favDish.$error.required && signUpForm.favDish.$touched"> No code entered</span>
-        <span ng-if="signUpForm.favDish.$touched &&  !signUpForm.favDish.$error.required && !signUpCtrl.processing && !signUpCtrl.favDishName"> Dish does not exist</span>
+        <span ng-if="!signUpForm.favDish.$error.required && !signUpCtrl.processing && !signUpCtrl.favDishName"> Dish does not exist</span>
         <span ng-if="!signUpForm.favDish.$error.required && !signUpCtrl.processing && signUpCtrl.favDishName"> {{ signUpCtrl.favDishName }}</span>
       </div>
 
